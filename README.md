@@ -1,2 +1,2 @@
 # getEastmoneyReport
-GET http://data.eastmoney.com/report/ 
+GET http://data.eastmoney.com/report/
