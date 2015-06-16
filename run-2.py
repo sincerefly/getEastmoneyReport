@@ -7,6 +7,7 @@ import time
 import re
 import json
 import base64
+import urllib2
 
 # -----------------------------------------------------------------
 # 这个程序可以爬取http://data.eastmoney.com/report/ 网站的股评数据
@@ -21,6 +22,8 @@ db = client.guping
 
 # 匹配网站的数据
 pattern = re.compile(r'<tbody>([\s\S]+)</tbody>')
+# the detail page get author
+pattern2 = re.compile(r'<div class="report-infos">([\s\S]+)</div>')
 
 print "-"*6 + ' start ' + '-'*6
 for page in range(1, MAX_NUMBER + 1):
@@ -47,14 +50,27 @@ for page in range(1, MAX_NUMBER + 1):
     else:
         print 'Error: ' + str(page) + '/' + str(MAX_NUMBER) + 'No data'
 
+    #print string 
     # 将数据每页数据拼接,保存到mongodb数据库中
     l = []
     for row in BeautifulSoup(string)("tr"):
-        #print row("td")[1]("span")[0]["title"]
-        #print '-'*6
-        #for i in row("td"):
-            #print i.text
-            #print i
+
+	# ------ Get the detail page to get the author ------
+	#print row("td")[5]("a")[0]["href"]
+
+	detail_url = 'http://data.eastmoney.com' + row("td")[5]("a")[0]["href"]
+	#detail_url = 'http://data.eastmoney.com/report/20150615/APPGN1vwyH6mASearchReport.html'
+	#print detail_url
+
+	detail_page = urllib2.urlopen(detail_url)
+	soup = BeautifulSoup(detail_page)
+
+	#print soup.find_all('div', class_='report-infos')[0]("span")[3].text
+	author2 = soup.find_all('div', class_='report-infos')[0]("span")[3].text
+	author2 = author2.split(',')
+
+        # ---------------------------------------------------
+
 
         data = {
             "date": row("td")[1]("span")[0]["title"],
@@ -64,6 +80,7 @@ for page in range(1, MAX_NUMBER + 1):
             "suggest": row("td")[6].text,
             "change": row("td")[7].text,
             "author": row("td")[8].text,
+            "author2": author2,
             "a1": row("td")[9].text,
             "a2": row("td")[10].text,
             "b1": row("td")[11].text,
@@ -72,7 +89,7 @@ for page in range(1, MAX_NUMBER + 1):
         #print data
         l.append(data)
 
-    db.dfcf_up.insert(l)
+    db.dfcf_up2.insert(l)
     useSeconds = str(int(time.time()) - startTime)
     print 'Success: ' + str(page) + '/' + str(MAX_NUMBER) + '\t' + base64encode +  '\tTotalUseTime: ' + useSeconds + 's'
 
