@@ -1,6 +1,6 @@
 from multiprocessing import Pool
 from bs4 import BeautifulSoup
-import os, time
+import time
 import requests
 
 def get_Data(url):
@@ -12,10 +12,6 @@ def get_Data(url):
     print '%s runs %0.2f seconds.' % (title, (end - start))
 
 if __name__=='__main__':
-
-    t1 = time.time()
-    print 'Parent process %s.' % os.getpid()
-    p = Pool()
 
     # 50 url
     url_list = [
@@ -71,12 +67,10 @@ if __name__=='__main__':
         'http://data.eastmoney.com/report/20150615/APPGN1vwyGwaASearchReport.html'
     ]
 	
+    print 'Waiting for ...'
+    t1 = time.time()
     for url in url_list:
-        p.apply_async(get_Data, args=(url,))
-
-    print 'Waiting for all subprocesses done...'
-    p.close()
-    p.join()
-    t2 = time.time()
+        get_Data(url)    
 	
-    print 'All subprocesses done. use %0.2f seconds' % (t2-t1)
+    t2 = time.time()
+    print 'Done. use %0.2f seconds' % (t2-t1)
