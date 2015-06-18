@@ -28,7 +28,7 @@ pattern = re.compile(r'<tbody>([\s\S]+)</tbody>')
 
 # Loop for get page list
 print "-"*6 + ' start ' + '-'*6
-for page in range(92, MAX_NUMBER + 1):
+for page in range(138, MAX_NUMBER + 1):
 
     # The Page list URL
     params = 'tp=1&cg=0&dt=2&page=' + str(page)

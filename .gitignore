@@ -1,1 +1,5 @@
 phantomjs
+.gitignore
+ghostdriver.log
+*.py~
+*.pyc

@@ -60,7 +60,7 @@ if __name__=='__main__':
         'http://data.eastmoney.com/report/20141218/APPFjG8SumLNASearchReport.html',
         'http://data.eastmoney.com/report/20141218/APPFjG8SumNdASearchReport.html',
         'http://data.eastmoney.com/report/20141218/APPFjG8SumPCASearchReport.html',
-        'http://data.eastmoney.com/report/20141218/APPFjG8SumPCASearchReport.html',
+        'http://data.eastmoney.com/report/20150616/APPGN2AwEpcGASearchReport.html',
         'http://data.eastmoney.com/report/20141218/APPFjG8SumQeASearchReport.html',
         'http://data.eastmoney.com/report/20141218/APPFjG8SumS1ASearchReport.html',
         'http://data.eastmoney.com/report/20141218/APPFjG8SumTrASearchReport.html',
