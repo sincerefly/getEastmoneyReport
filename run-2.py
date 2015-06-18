@@ -8,15 +8,14 @@ import re
 import json
 import base64
 import urllib2
-import chardet
-#print chardet.detect('我是中文')
+import requests
 
 # -----------------------------------------------------------------
 # This tools can get info from 'http://data.eastmoney.com/report'
 # -----------------------------------------------------------------
 
 # Static variable
-MAX_NUMBER = 158
+MAX_NUMBER = 157
 startTime = int(time.time())
 
 client = MongoClient('localhost', 27017)
@@ -27,7 +26,7 @@ pattern = re.compile(r'<tbody>([\s\S]+)</tbody>')
 
 # Loop for get page list
 print "-"*6 + ' start ' + '-'*6
-for page in range(64, MAX_NUMBER + 1):
+for page in range(1, MAX_NUMBER + 1):
 
     # The Page list URL
     params = 'tp=1&cg=0&dt=2&page=' + str(page)
@@ -65,23 +64,25 @@ for page in range(64, MAX_NUMBER + 1):
         #detail_url = 'http://data.eastmoney.com/report/20150615/APPGN1vwyH6mASearchReport.html'
         print '\t -> ' + str(count) + '. '+ lasturl
 
-        detail_page = urllib2.urlopen(detail_url)
-        soup = BeautifulSoup(detail_page, from_encoding='gb2312')
+        try:
+            detail_page = requests.get(detail_url).text
+            soup = BeautifulSoup(detail_page, from_encoding='gb2312')
+        except:
+            print '\t -> ' + str(count) + '. '+ 'The Urllib3 err, Try ...'
+            time.sleep(3)
+            detail_page = requests.get(detail_url).text
+            soup = BeautifulSoup(detail_page, from_encoding='gb2312')
 
-        #print soup.find_all('div', class_='report-infos')[0]("span")[3].text
-        author2 = soup.find_all('div', class_='report-infos')[0]("span")[3].text
-        #print isinstance(author2, unicode)
-
-        #print author2
-        #the author2 is unicode 
-        #print isinstance(author2, unicode)
-        #print author2
+        try:
+            author2 = soup.find_all('div', class_='report-infos')[0]("span")[3].text
+        except IndexError:
+            print '\t -> ' + str(count) + '. '+ 'The IndexError, Try ...'
+            time.sleep(3)
+            soup = BeautifulSoup(detail_page, from_encoding='gb2312')
+            author2 = soup.find_all('div', class_='report-infos')[0]("span")[3].text
    
         author2_list = author2.split(',')
         author2_utf8 = map(lambda x: x.encode('utf-8', 'replace'), author2_list)
-        #print type(author2_utf8[0])
-        #print author2_utf8
-        #print author2_utf8[0].decode('utf-8', 'ignore').encode('gbk')
 
         # ---------------------------------------------------
 
@@ -101,7 +102,7 @@ for page in range(64, MAX_NUMBER + 1):
         }
         l.append(data)
 
-    db.dfcf_up3.insert(l)
+    db.dfcf_up2.insert(l)
     useSeconds = str(int(time.time()) - startTime)
     print 'Success: ' + str(page) + '/' + str(MAX_NUMBER) + '\t' + base64encode +  '\tTotalUseTime: ' + useSeconds + 's'
 
