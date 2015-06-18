@@ -7,7 +7,7 @@ GET http://data.eastmoney.com/report/
 
 基于Phantomjs，去官网了解怎么安装。如果你是Fedora系统，可以直接找我要编译好的可执行文件。 
 
-Email: kissbug8720#gmail.com
+Email: `kissbug8720@gmail.com`
 
 - run.py 爬虫文件(获取report列表的股评信息)
 - run-2.py 爬虫文件(在之前的基础上增加了进入详情页获取作者的功能)
