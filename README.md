@@ -17,4 +17,3 @@ Email: `kissbug8720@gmail.com`
 - test_singleprocessing.py 单进程获取50个详情页的文章标题
 - test_multiprocessing.py 多进程的获取50个详情页的文章标题
 
-*程序中有代码注释, 不多介绍了, 新学爬虫的同学可以参考下*
