@@ -1,3 +1,5 @@
+#!/bin/env python
+#encoding:utf-8
 from multiprocessing import Pool
 from bs4 import BeautifulSoup
 import os, time
@@ -6,7 +8,7 @@ import requests
 def get_Data(url):
     start = time.time()
     page = requests.get(url).text
-    soup = BeautifulSoup(page, from_encoding='gb2312')
+    soup = BeautifulSoup(page, "html.parser")
     title = soup.find_all('div', class_='report-title')[0]("h1")[0].text
     end = time.time()
     print '%s runs %0.2f seconds.' % (title, (end - start))
