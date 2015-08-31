@@ -100,11 +100,18 @@ def getTheArticleList(pageid, page_url):
 if __name__=='__main__':
 
     t1 = time.time()
+    p = Pool()
 
     for pageid in range(StartPage, EndPage+1):
 
         url = 'http://vip.stock.finance.sina.com.cn/q/go.php/vReport_List/kind/lastest/index.phtml?p=' + str(pageid)
-        getTheArticleList(pageid, url)
+        #getTheArticleList(pageid, url)
+        p.apply_async(getTheArticleList, args=(pageid, url,))
+
+    p.close()
+    p.join()
+
+    t2 = time.time()
 
 
     sys.exit(0)
