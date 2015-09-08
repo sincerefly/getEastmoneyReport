@@ -94,6 +94,15 @@ def getTheArticleList(pageid, page_url):
             print "pass 3: no code"
             continue
 
+        info = {
+                "name": title,
+                "code": code,
+                "date": date,
+                "company": company,
+                "author": author,
+                "url": url
+        }
+        db.sina_article_alls.update({'date': date, 'code': code, 'company': company}, {'$set': info}, upsert=True)
         print '(%s/%s)(%s/%s) %s %s %s %s %s' % (str(pageid), str(EndPage), str(count), '40', code, date, title, company, author)
 
 

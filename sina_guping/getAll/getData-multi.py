@@ -13,8 +13,8 @@ import urllib
 
 # Setting
 multi = 0
-StartPage = 0
-EndPage = 3671
+StartPage = 1616
+EndPage = 2000
 
 # Connect Mongo
 client = MongoClient('localhost', 27017)
@@ -94,6 +94,15 @@ def getTheArticleList(pageid, page_url):
             print "pass 3: no code"
             continue
 
+        info = {
+                "name": title,
+                "code": code,
+                "date": date,
+                "company": company,
+                "author": author,
+                "url": url
+        }
+        db.sina_article_alls.update({'date': date, 'code': code, 'company': company}, {'$set': info}, upsert=True)
         print '(%s/%s)(%s/%s) %s %s %s %s %s' % (str(pageid), str(EndPage), str(count), '40', code, date, title, company, author)
 
 
